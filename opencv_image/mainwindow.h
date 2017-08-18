@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QImage>
 #include <QVector>
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/opencv.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -52,6 +54,8 @@ private slots:
     void on_pushButton_Grabcut_clicked();
 
     void on_pushButton_Cluster_clicked();
+
+    void on_pushButton__clicked();
 
 private:
     Ui::MainWindow *ui;

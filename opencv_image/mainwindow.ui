@@ -272,7 +272,7 @@
      <string>Cluster</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_K_Means">
+   <widget class="QPushButton" name="pushButton_">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -282,7 +282,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>K-means</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
