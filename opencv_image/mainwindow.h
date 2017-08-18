@@ -49,6 +49,10 @@ private slots:
 
     void cal_percentage();
 
+    void on_pushButton_Grabcut_clicked();
+
+    void on_pushButton_Cluster_clicked();
+
 private:
     Ui::MainWindow *ui;
     cv::Mat Ori;

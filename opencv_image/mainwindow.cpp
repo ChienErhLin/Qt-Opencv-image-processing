@@ -129,6 +129,10 @@ void MainWindow::on_pushButton_gray_clicked()
                     = (mat_processed.at<cv::Vec3b>(r,c)[0]
                     + mat_processed.at<cv::Vec3b>(r,c)[1]
                     + mat_processed.at<cv::Vec3b>(r,c)[2])/3;
+//            mat_gray.at<uchar>(r,c)
+//                    = (0.299 * mat_processed.at<cv::Vec3b>(r,c)[0]
+//                    + 0.587 * mat_processed.at<cv::Vec3b>(r,c)[1]
+//                    + 0.114 * mat_processed.at<cv::Vec3b>(r,c)[2]);
         }
     }
     this->Gray = mat_gray.clone();
@@ -171,7 +175,6 @@ void MainWindow::on_pushButton_Invert_clicked()
     cv::Mat mat_processed = this->Processed;
     cv::Mat mat_invert;
     mat_invert = mat_processed.clone();
-//    mat_invert.create(cv::Size(mat_processed.cols,mat_processed.rows),CV_8UC1);
     //easy way
 //    mat_invert =  cv::Scalar::all(255) - mat_processed;
 //    or-> bitwise_not ( mat_processed, mat_invert );
@@ -197,7 +200,6 @@ void MainWindow::on_pushButton_Brightness_clicked()
     cv::Mat mat_processed = this->Processed;
     cv::Mat mat_bright;
     mat_bright = mat_processed.clone();
-//    mat_bright.create(cv::Size(mat_processed.cols,mat_processed.rows),CV_8UC1);
     for(int r=0; r<mat_bright.rows; r++){
         for(int c=0; c<mat_bright.cols; c++){
             for(int k=0; k<mat_bright.channels(); k++){
@@ -228,7 +230,6 @@ void MainWindow::on_pushButton_Color_clicked()
     cv::Mat mat_processed = this->Processed;
     cv::Mat mat_color;
     mat_color = mat_processed.clone();
-//    mat_bright.create(cv::Size(mat_processed.cols,mat_processed.rows),CV_8UC1);
     QVector<int> value(3);
     if(color==0){
         value[0] = 50; value[1] = 0; value[2] = 0;
@@ -364,6 +365,31 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     }
 }
 
+void MainWindow::on_pushButton_Grabcut_clicked()
+{
+    cv::Mat mat_processed = this->Processed;
+    cv::Mat mat_grabcut;
+    mat_grabcut = mat_processed.clone();
+    //cv::pyrMeanShiftFiltering( mat_processed, mat_grabcut, 20, 45, 3);
+    int border = 1;
+    cv::Rect rect(border,border,mat_processed.cols-2*border,mat_processed.rows-2*border);
+    cv::Mat bgdModel,fgdModel;
+    cv::grabCut(mat_processed, mat_grabcut, rect, bgdModel, fgdModel, 1, cv::GC_INIT_WITH_RECT);
+    // Get the pixels marked as likely foreground
+    cv::compare(mat_grabcut,cv::GC_PR_FGD,mat_grabcut,cv::CMP_EQ);
+    // Generate output image
+    cv::Mat foreground(mat_processed.size(),CV_8UC3,cv::Scalar(255,255,255));
+    mat_processed.copyTo(foreground,mat_grabcut); // bg pixels not copied
+    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(foreground)));
+    ui->label_information->setText("Status: Grabcut");
+    this->Final_img = foreground.clone();
+}
+
+void MainWindow::on_pushButton_Cluster_clicked()
+{
+
+}
+
 //-------------------other functions----------------------
 
 void MainWindow::cal_percentage()
@@ -381,3 +407,5 @@ void MainWindow::cal_percentage()
     double ratio = count * 100 /total;
     ui->label_information->setText("Status: Binary, black percentage " + QString::number(ratio) + " %");
 }
+
+

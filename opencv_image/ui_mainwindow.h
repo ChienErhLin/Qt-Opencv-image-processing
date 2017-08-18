@@ -45,6 +45,9 @@ public:
     QPushButton *pushButton_Save;
     QPushButton *pushButton_Invert;
     QLabel *label_information;
+    QPushButton *pushButton_Grabcut;
+    QPushButton *pushButton_Cluster;
+    QPushButton *pushButton_K_Means;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -113,6 +116,15 @@ public:
         label_information = new QLabel(centralWidget);
         label_information->setObjectName(QStringLiteral("label_information"));
         label_information->setGeometry(QRect(430, 70, 421, 16));
+        pushButton_Grabcut = new QPushButton(centralWidget);
+        pushButton_Grabcut->setObjectName(QStringLiteral("pushButton_Grabcut"));
+        pushButton_Grabcut->setGeometry(QRect(100, 70, 75, 23));
+        pushButton_Cluster = new QPushButton(centralWidget);
+        pushButton_Cluster->setObjectName(QStringLiteral("pushButton_Cluster"));
+        pushButton_Cluster->setGeometry(QRect(190, 70, 75, 23));
+        pushButton_K_Means = new QPushButton(centralWidget);
+        pushButton_K_Means->setObjectName(QStringLiteral("pushButton_K_Means"));
+        pushButton_K_Means->setGeometry(QRect(280, 70, 75, 23));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -148,6 +160,9 @@ public:
         pushButton_Save->setText(QApplication::translate("MainWindow", "Save Image", Q_NULLPTR));
         pushButton_Invert->setText(QApplication::translate("MainWindow", "Invert", Q_NULLPTR));
         label_information->setText(QApplication::translate("MainWindow", "Information: ", Q_NULLPTR));
+        pushButton_Grabcut->setText(QApplication::translate("MainWindow", "Grabcut", Q_NULLPTR));
+        pushButton_Cluster->setText(QApplication::translate("MainWindow", "Cluster", Q_NULLPTR));
+        pushButton_K_Means->setText(QApplication::translate("MainWindow", "K-means", Q_NULLPTR));
     } // retranslateUi
 
 };
