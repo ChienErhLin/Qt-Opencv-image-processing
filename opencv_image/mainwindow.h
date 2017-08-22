@@ -55,7 +55,11 @@ private slots:
 
     void on_pushButton_Cluster_clicked();
 
-    void on_pushButton__clicked();
+    void on_pushButton_Dithering_BW_clicked();
+
+    void on_pushButton_Dithering_color_clicked();
+
+    void on_pushButton_Sharpening_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -66,6 +70,10 @@ private:
     bool GrayYet;
     int color;
     int status;
+    QImage *Image;
+    QImage *Image_save;
+    QPixmap pixmap;
+    QImage *a;
 };
 
 #endif // MAINWINDOW_H

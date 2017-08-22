@@ -47,8 +47,9 @@ public:
     QLabel *label_information;
     QPushButton *pushButton_Grabcut;
     QPushButton *pushButton_Cluster;
-    QPushButton *pushButton_;
-    QPushButton *pushButton;
+    QPushButton *pushButton_Dithering_color;
+    QPushButton *pushButton_Dithering_BW;
+    QPushButton *pushButton_Sharpening;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -85,12 +86,12 @@ public:
         pushButton_Binary->setCheckable(false);
         horizontalSlider = new QSlider(centralWidget);
         horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
-        horizontalSlider->setGeometry(QRect(570, 30, 281, 22));
+        horizontalSlider->setGeometry(QRect(580, 30, 271, 22));
         horizontalSlider->setMaximum(255);
         horizontalSlider->setOrientation(Qt::Horizontal);
         label_slider = new QLabel(centralWidget);
         label_slider->setObjectName(QStringLiteral("label_slider"));
-        label_slider->setGeometry(QRect(430, 20, 131, 41));
+        label_slider->setGeometry(QRect(430, 20, 141, 41));
         label_slider->setWordWrap(true);
         pushButton_Clear = new QPushButton(centralWidget);
         pushButton_Clear->setObjectName(QStringLiteral("pushButton_Clear"));
@@ -122,13 +123,16 @@ public:
         pushButton_Grabcut->setGeometry(QRect(90, 70, 75, 23));
         pushButton_Cluster = new QPushButton(centralWidget);
         pushButton_Cluster->setObjectName(QStringLiteral("pushButton_Cluster"));
-        pushButton_Cluster->setGeometry(QRect(170, 70, 75, 23));
-        pushButton_ = new QPushButton(centralWidget);
-        pushButton_->setObjectName(QStringLiteral("pushButton_"));
-        pushButton_->setGeometry(QRect(250, 70, 75, 23));
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(330, 10, 75, 23));
+        pushButton_Cluster->setGeometry(QRect(330, 70, 75, 23));
+        pushButton_Dithering_color = new QPushButton(centralWidget);
+        pushButton_Dithering_color->setObjectName(QStringLiteral("pushButton_Dithering_color"));
+        pushButton_Dithering_color->setGeometry(QRect(244, 70, 81, 23));
+        pushButton_Dithering_BW = new QPushButton(centralWidget);
+        pushButton_Dithering_BW->setObjectName(QStringLiteral("pushButton_Dithering_BW"));
+        pushButton_Dithering_BW->setGeometry(QRect(170, 70, 75, 23));
+        pushButton_Sharpening = new QPushButton(centralWidget);
+        pushButton_Sharpening->setObjectName(QStringLiteral("pushButton_Sharpening"));
+        pushButton_Sharpening->setGeometry(QRect(330, 40, 75, 23));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -156,7 +160,7 @@ public:
         label_processed->setText(QApplication::translate("MainWindow", "Processed Image", Q_NULLPTR));
         pushButton_gray->setText(QApplication::translate("MainWindow", "Grayscale", Q_NULLPTR));
         pushButton_Binary->setText(QApplication::translate("MainWindow", "Binary", Q_NULLPTR));
-        label_slider->setText(QApplication::translate("MainWindow", "Slider for Binary / Brightness / Color / Blur", Q_NULLPTR));
+        label_slider->setText(QApplication::translate("MainWindow", "Slider for Binary / Brightness / Blur / Sharpening", Q_NULLPTR));
         pushButton_Clear->setText(QApplication::translate("MainWindow", "Clear Image", Q_NULLPTR));
         pushButton_Brightness->setText(QApplication::translate("MainWindow", "Brightness", Q_NULLPTR));
         pushButton_Color->setText(QApplication::translate("MainWindow", "Change Color", Q_NULLPTR));
@@ -165,9 +169,10 @@ public:
         pushButton_Invert->setText(QApplication::translate("MainWindow", "Invert", Q_NULLPTR));
         label_information->setText(QApplication::translate("MainWindow", "Information: ", Q_NULLPTR));
         pushButton_Grabcut->setText(QApplication::translate("MainWindow", "Grabcut", Q_NULLPTR));
-        pushButton_Cluster->setText(QApplication::translate("MainWindow", "Cluster", Q_NULLPTR));
-        pushButton_->setText(QString());
-        pushButton->setText(QApplication::translate("MainWindow", "PushButton", Q_NULLPTR));
+        pushButton_Cluster->setText(QApplication::translate("MainWindow", "MeanShift", Q_NULLPTR));
+        pushButton_Dithering_color->setText(QApplication::translate("MainWindow", "Dithering color", Q_NULLPTR));
+        pushButton_Dithering_BW->setText(QApplication::translate("MainWindow", "Dithering BW", Q_NULLPTR));
+        pushButton_Sharpening->setText(QApplication::translate("MainWindow", "Sharpening", Q_NULLPTR));
     } // retranslateUi
 
 };

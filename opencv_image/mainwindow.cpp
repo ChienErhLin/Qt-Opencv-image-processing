@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Image Processing using opencv and Qt");
     color=0;
     status=0;
+    GrayYet = false;
 }
 
 MainWindow::~MainWindow()
@@ -28,6 +29,17 @@ void MainWindow::on_pushButton_open_clicked()
         return;
     }
     else{
+//        Image->load(fileName);
+//        pixmap = QPixmap::fromImage(*Image);
+        a = new QImage;
+//        QString FilePath = QFileDialog::getOpenFileName(this,tr("Open File"),"/",tr("Images (*.png *.jpg)"));
+        a->load(fileName);
+        if(a->isNull()) {QMessageBox::information(this,"Warning!","Need a image file!");}
+            if(!a->isNull()){
+                Image = new QImage;
+                Image=a;
+                pixmap = QPixmap::fromImage(*Image);
+            }
         Mat mat_original = imread(fileName.toStdString());
         int width = mat_original.cols;
         int height = mat_original.rows;
@@ -84,7 +96,7 @@ void MainWindow::showImage(const Mat &mat_original)
        cv::resize(mat_original,mat_processed,Size((mat_original.cols*height)/mat_original.rows,height));
     }
 
-    ui->label_img_original->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_processed)));
+    ui->label_img_original->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_processed))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
     this->Processed = mat_processed.clone();
     this->Final_img = mat_processed.clone();
 }
@@ -93,16 +105,26 @@ void MainWindow::on_pushButton_Save_clicked()
 {
     //Save processed image
     Mat mat_final = this->Final_img;
-//    imshow("", mat_final);
-//    mwrite("processed.bmp", mat_final);
-
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image"), "/", tr("image (*.bmp)"));
-    if(fileName==NULL){
-        QMessageBox::information(0,"Error!","Need image name!");
+    if(status == 0){
+        QMessageBox::information(0,"Error!","Need processed image!");
         return;
     }
+    //opencv mat
+    else if(status <= 8){
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image"), "/", tr("image (*.bmp)"));
+        if(fileName==NULL){
+            QMessageBox::information(0,"Error!","Need image name!");
+            return;
+        }
+        else{
+            imwrite(fileName.toStdString(),mat_final);
+        }
+    }
+    //QImage pixmap
     else{
-        imwrite(fileName.toStdString(),mat_final);
+        QString ImagePath = QFileDialog::getSaveFileName(this, tr("Save Image"), "/", tr("JPG (*.jpg);;PNG (*png)"));
+        *Image_save = pixmap.toImage();
+        Image_save->save(ImagePath);
     }
 
 }
@@ -140,35 +162,19 @@ void MainWindow::on_pushButton_gray_clicked()
     this->Gray = mat_gray.clone();
     this->Final_img = mat_gray.clone();
     GrayYet = true;
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_gray)));
+    ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_gray))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
     ui->label_information->setText("Status: Grayscale");
     //change status
     status = 1;
+    ui->horizontalSlider->setValue(0);
 }
 
 void MainWindow::on_pushButton_Binary_clicked()
 {
     //Binary #2
-    if(!GrayYet){
-        Mat mat_processed = this->Processed;
-        Mat mat_gray;
-        mat_gray.create(Size(mat_processed.cols,mat_processed.rows),CV_8UC1);
-        cvtColor(mat_processed, mat_gray, CV_BGR2GRAY);
-        this->Gray = mat_gray.clone();
-        GrayYet = true;
-    }
-    Mat mat_gray = this->Gray;
-    Mat mat_cut;
-    mat_cut.create(Size(mat_gray.cols,mat_gray.rows),CV_8UC1);
-    //easy way
-    threshold(mat_gray, mat_cut, 125, 255, THRESH_BINARY);
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_cut)));
-    ui->horizontalSlider->setSliderPosition(125);
-    this->Final_img = mat_cut.clone();
-    //calculate black percentage
-    cal_percentage();
     //change status
     status = 2;
+    ui->horizontalSlider->setSliderPosition(125);
 }
 
 void MainWindow::on_pushButton_Invert_clicked()
@@ -189,40 +195,20 @@ void MainWindow::on_pushButton_Invert_clicked()
             }
         }
     }
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_invert)));
+    ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_invert))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
     ui->label_information->setText("Status: Invert");
     this->Final_img = mat_invert.clone();
     //change status
     status = 3;
+    ui->horizontalSlider->setValue(0);
 }
 
 void MainWindow::on_pushButton_Brightness_clicked()
 {
     //Brightness #4
-    Mat mat_processed = this->Processed;
-    Mat mat_bright;
-    mat_bright = mat_processed.clone();
-    for(int r=0; r<mat_bright.rows; r++){
-        for(int c=0; c<mat_bright.cols; c++){
-            for(int k=0; k<mat_bright.channels(); k++){
-                if(mat_bright.at<Vec3b>(r,c)[k]+50 >255){
-                    mat_bright.at<Vec3b>(r,c)[k]=255;
-                }
-                else if(mat_bright.at<Vec3b>(r,c)[k]+50 <0){
-                    mat_bright.at<Vec3b>(r,c)[k]=0;
-                }
-                else{
-                    mat_bright.at<Vec3b>(r,c)[k] = mat_bright.at<Vec3b>(r,c)[k]+50;
-                }
-            }
-        }
-    }
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_bright)));
-    ui->horizontalSlider->setSliderPosition(150);
-    ui->label_information->setText("Status: Brightness +50");
-    this->Final_img = mat_bright.clone();
     //change status
     status = 4;
+    ui->horizontalSlider->setSliderPosition(150);
 }
 
 void MainWindow::on_pushButton_Color_clicked()
@@ -263,45 +249,42 @@ void MainWindow::on_pushButton_Color_clicked()
     }
     color+=1;
     if(color==3) color=0;
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_color)));
+    ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_color))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
     ui->label_information->setText("Status: Color changed");
     this->Final_img = mat_color.clone();
     //change status
     status = 5;
+    ui->horizontalSlider->setValue(0);
 }
 
 
 void MainWindow::on_pushButton_Blur_clicked()
 {
     //Blur #6
-    Mat mat_processed = this->Processed;
-    Mat mat_blur;
-    mat_blur = mat_processed.clone();
-//    mat_blur.create(Size(mat_processed.cols,mat_processed.rows),CV_8UC1);
-    //easy way
-    blur(mat_processed,mat_blur,Size(3,3));
-    //do it by myself
-//    for(int r=1; r<mat_processed.rows-1; r++){
-//        for(int c=1; c<mat_processed.cols-1; c++){
-//            for(int n=0; n<mat_processed.channels(); n++){
-//                mat_blur.at<Vec3b>(r,c)[n] =
-//                        (mat_processed.at<Vec3b>(r-1,c-1)[n] + mat_processed.at<Vec3b>(r-1,c)[n] + mat_processed.at<Vec3b>(r-1,c+1)[n]
-//                         + mat_processed.at<Vec3b>(r,c-1)[n] + mat_processed.at<Vec3b>(r,c)[n] + mat_processed.at<Vec3b>(r,c+1)[n]
-//                         + mat_processed.at<Vec3b>(r+1,c-1)[n] + mat_processed.at<Vec3b>(r+1,c)[n] + mat_processed.at<Vec3b>(r+1,c+1)[n])/9;
-//            }
-//        }
-//    }
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_blur)));
-    ui->label_information->setText("Status: Blur 3");
-    ui->horizontalSlider->setSliderPosition(6);
-    this->Final_img = mat_blur.clone();
     //change status
     status = 6;
+    ui->horizontalSlider->setSliderPosition(6);
+}
+
+void MainWindow::on_pushButton_Cluster_clicked()
+{
+    //Cluster #7
+    // #7
+    Mat mat_processed = this->Processed;
+    Mat mat_grabcut;
+    mat_grabcut = mat_processed.clone();
+    pyrMeanShiftFiltering( mat_processed, mat_grabcut, 20, 45, 3);
+    ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_grabcut))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
+    ui->label_information->setText("Status: MeanShiftFiltering");
+    this->Final_img = mat_grabcut.clone();
+    //change status
+    status = 7;
+    ui->horizontalSlider->setValue(0);
 }
 
 void MainWindow::on_pushButton_Grabcut_clicked()
 {
-    //Grabcut #7
+    //Grabcut #8
     Mat mat_processed = this->Processed;
     Mat mat_grabcut;
     mat_grabcut = mat_processed.clone();
@@ -315,93 +298,128 @@ void MainWindow::on_pushButton_Grabcut_clicked()
     // Generate output image
     Mat foreground(mat_processed.size(),CV_8UC3,Scalar(255,255,255));
     mat_processed.copyTo(foreground,mat_grabcut); // bg pixels not copied
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(foreground)));
+    ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(foreground))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
     ui->label_information->setText("Status: Grabcut");
     this->Final_img = foreground.clone();
     //change status
-    status = 7;
-}
-
-void MainWindow::on_pushButton_Cluster_clicked()
-{
-    //Cluster #8
-    Mat mat_processed = this->Processed;
-    Mat p = Mat::zeros(mat_processed.cols*mat_processed.rows, 5, CV_32F);
-    Mat bestLabels, centers, clustered;
-    Mat bgr[3];
-    split(mat_processed, bgr);
-    for(int i=0; i<mat_processed.cols*mat_processed.rows; i++){
-        p.at<float>(i,0) = (i/mat_processed.cols) / mat_processed.rows;
-        p.at<float>(i,1) = (i%mat_processed.cols) / mat_processed.cols;
-        p.at<float>(i,2) = bgr[0].data[i] / 255.0;
-        p.at<float>(i,3) = bgr[1].data[i] / 255.0;
-        p.at<float>(i,4) = bgr[2].data[i] / 255.0;
-    }
-
-    int K = 8;
-    kmeans(p, K, bestLabels, TermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 10, 1.0),
-               3, KMEANS_PP_CENTERS, centers);
-    int colors[8];
-    for(int i=0; i<K; i++){
-        colors[i] = 255/(i+1);
-    }
-
-    clustered = Mat(mat_processed.rows, mat_processed.cols, CV_32F);
-    for(int i=0; i<mat_processed.rows * mat_processed.cols; i++){
-        //crash at this line
-        clustered.at<float>(i/mat_processed.cols, i%mat_processed.cols) = (float)(colors[bestLabels.at<int>(0,i)]);
-    }
-    clustered.convertTo(clustered, CV_8U);
-
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(clustered)));
-    ui->label_information->setText("Status: Cluster");
-    this->Final_img = clustered.clone();
-
-//    int origRows = mat_processed.rows;
-//    Mat colVec = mat_processed.reshape(1, mat_processed.rows*mat_processed.cols); // change to a Nx3 column vector
-//    Mat colVecD, bestLabels, centers, clustered;
-//    int attempts = 5;
-//    int clusts = 8;
-//    double eps = 0.001;
-//    colVec.convertTo(colVecD, CV_32FC3, 1.0/255.0); // convert to floating point
-//    double compactness = kmeans(colVecD, clusts, bestLabels,
-//          TermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, attempts, eps),
-//          attempts, KMEANS_PP_CENTERS, centers);
-//    Mat labelsImg = bestLabels.reshape(1, origRows); // single channel image of labels
-
-//    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(clustered)));
-//    ui->label_information->setText("Status: Cluster");
-//    this->Final_img = clustered.clone();
-
-    //change status
     status = 8;
+    ui->horizontalSlider->setValue(0);
 }
 
-void MainWindow::on_pushButton__clicked()
+
+
+//新加功能~~~
+
+void MainWindow::on_pushButton_Dithering_BW_clicked()
 {
-    // #9
-    Mat mat_processed = this->Processed;
-    Mat mat_grabcut;
-    mat_grabcut = mat_processed.clone();
-    pyrMeanShiftFiltering( mat_processed, mat_grabcut, 20, 45, 3);
-    ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_grabcut)));
-    ui->label_information->setText("Status: MeanShiftFiltering");
-    this->Final_img = mat_grabcut.clone();
+    QImage grayscale = *Image;
+    QRgb val;
+    QColor oldColor;
+    for(int x=0;x<grayscale.width();x++){
+        for(int y=0;y<grayscale.height();y++){
+            oldColor = QColor(grayscale.pixel(x,y));
+            int ave = (oldColor.red()+oldColor.green()+oldColor.blue())/3;
+            val = qRgb(ave,ave,ave);
+            grayscale.setPixel(x,y,val);
+        }
+    }
+    QImage dithering = grayscale;
+    QRgb val1;
+    QColor oldColor1;
+    int shade, err= 0;
+    for (int y=0;y<dithering.height();y++){
+        for(int x=0;x<dithering.width()-1;x++)
+        {
+            oldColor1 = QColor(dithering.pixel(x,y));
+            shade = oldColor1.red() + err;
+            if(shade<127){
+                err = shade;
+                shade = 0;
+            }
+            else{
+                err = shade - 255;
+                shade = 255;
+            }
+            val1 = qRgb(shade,shade,shade);
+            dithering.setPixel(x,y,val1);
+        }
+    }
+    pixmap = QPixmap::fromImage(dithering);
+    ui->label_img_processed->setPixmap(pixmap.scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
+    ui->label_information->setText("Status: Dithering BW");
     //change status
     status = 9;
+    ui->horizontalSlider->setValue(0);
 }
 
+
+void MainWindow::on_pushButton_Dithering_color_clicked()
+{
+    QImage dithering = *Image;
+    QRgb val1;
+    QColor oldColor1;
+    int shader, shadeg, shadeb, errr = 0, errg = 0, errb = 0;
+    for (int y=0;y<dithering.height();y++){
+        for(int x=0;x<dithering.width()-1;x++)
+        {
+            oldColor1 = QColor(dithering.pixel(x,y));
+            shader = oldColor1.red() + errr;
+            shadeg = oldColor1.green() + errg;
+            shadeb = oldColor1.blue() + errb;
+            if(shader<127){
+                errr = shader;
+                shader = 0;
+            }
+            else{
+                errr = shader - 255;
+                shader = 255;
+            }
+            if(shadeg<127){
+                errg = shadeg;
+                shadeg = 0;
+            }
+            else{
+                errg = shadeg - 255;
+                shadeg = 255;
+            }
+            if(shadeb<127){
+                errb = shadeb;
+                shadeb = 0;
+            }
+            else{
+                errb = shadeb - 255;
+                shadeb = 255;
+            }
+            val1 = qRgb(shader,shadeg,shadeb);
+            dithering.setPixel(x,y,val1);
+        }
+    }
+    pixmap = QPixmap::fromImage(dithering);
+    ui->label_img_processed->setPixmap(pixmap.scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
+    ui->label_information->setText("Status: Dithering color");
+    //change status
+    status = 10;
+    ui->horizontalSlider->setValue(0);
+}
+
+
+void MainWindow::on_pushButton_Sharpening_clicked()
+{
+    //change status
+    status = 11;
+    ui->horizontalSlider->setValue(90);
+}
 
 //------------------slider------------------
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     //action depends on status
-        //only works when Binary #2 / Brightness #4 / Color #5 / Blur #6 checked
-    if(status == 2) {  //binary
-        if(!GrayYet){
-            Mat mat_processed = this->Processed;
-            Mat mat_gray;
+        //only works when Binary #2 / Brightness #4 / Blur #6 / Sharpen #11 checked
+        if(status == 2) {  //binary
+            if(!GrayYet){
+                Mat mat_processed = this->Processed;
+                Mat mat_gray;
                 mat_gray.create(Size(mat_processed.cols,mat_processed.rows),CV_8UC1);
                 cvtColor(mat_processed, mat_gray, CV_BGR2GRAY);
                 this->Gray = mat_gray.clone();
@@ -411,7 +429,7 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
             Mat mat_cut;
             mat_cut.create(Size(mat_gray.cols,mat_gray.rows),CV_8UC1);
             threshold(mat_gray, mat_cut, value, 255, THRESH_BINARY);
-            ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_cut)));
+            ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_cut))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
             this->Final_img = mat_cut.clone();
             //calculate black percentage
             cal_percentage();
@@ -437,23 +455,60 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
                     }
                 }
             }
-            ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_bright)));
+            ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_bright))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
             if((value-125)*2 > 0){ui->label_information->setText("Status: Brightness +" + QString::number((value-125)*2));}
             else{ui->label_information->setText("Status: Brightness " + QString::number((value-125)*2));}
             this->Final_img = mat_bright.clone();
         }
-        else if(status == 5) {  //Color
-
-
-        }
+        else if(status == 11){  //Sharpen
+            QImage sharpen = *Image;
+            QRgb val;
+            QColor oldColor;
+            int Lap[9] = {-1, -1, -1, -1, (value/10), -1, -1, -1, -1};
+            for(int x=1;x<sharpen.width()-1;x++){
+                for(int y=1;y<sharpen.height()-1;y++){
+                    int r=0, g=0, b=0;
+                    int Index=0;
+                    for (int col = -1; col <= 1; col++){
+                        for (int row = -1; row <= 1; row++){
+                            oldColor = QColor(sharpen.pixel(x+row,y+col));
+                            r += oldColor.red() * Lap[Index];
+                            g += oldColor.green() * Lap[Index];
+                            b += oldColor.blue() * Lap[Index];
+                            Index++;
+                        }
+                    }
+                    if(r<0) r=0; if(r>255) r=255;
+                    if(g<0) g=0; if(g>255) g=255;
+                    if(b<0) b=0; if(b>255) b=255;
+                    val = qRgb(r,g,b);
+                    sharpen.setPixel(x-1,y-1,val);
+                }
+            }
+            pixmap = QPixmap::fromImage(sharpen);
+            ui->label_img_processed->setPixmap(pixmap.scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
+            ui->label_information->setText("Status: Sharpening " + QString::number(value/10));
+    }
         else if(status == 6) {  //Blur
         if(value>1){
             Mat mat_processed = this->Processed;
             Mat mat_blur;
             mat_blur = mat_processed.clone();
-            blur(mat_processed,mat_blur,Size(value/2,value/2));
-            ui->label_img_processed->setPixmap(QPixmap::fromImage(this->Mat2QImage(mat_blur)));
-            ui->label_information->setText("Status: Blur " + QString::number(value/2));
+            //easy way
+            blur(mat_processed,mat_blur,Size(value,value));
+            //do it by myself
+//            for(int r=1; r<mat_processed.rows-1; r++){
+//                for(int c=1; c<mat_processed.cols-1; c++){
+//                    for(int n=0; n<mat_processed.channels(); n++){
+//                        mat_blur.at<Vec3b>(r,c)[n] =
+//                                (mat_processed.at<Vec3b>(r-1,c-1)[n] + mat_processed.at<Vec3b>(r-1,c)[n] + mat_processed.at<Vec3b>(r-1,c+1)[n]
+//                                 + mat_processed.at<Vec3b>(r,c-1)[n] + mat_processed.at<Vec3b>(r,c)[n] + mat_processed.at<Vec3b>(r,c+1)[n]
+//                                 + mat_processed.at<Vec3b>(r+1,c-1)[n] + mat_processed.at<Vec3b>(r+1,c)[n] + mat_processed.at<Vec3b>(r+1,c+1)[n])/9;
+//                    }
+//                }
+//            }
+            ui->label_img_processed->setPixmap((QPixmap::fromImage(this->Mat2QImage(mat_blur))).scaled(ui->label_img_processed->width(),ui->label_img_processed->height(),Qt::KeepAspectRatio));
+            ui->label_information->setText("Status: Blur 3");
             this->Final_img = mat_blur.clone();
         }
     }

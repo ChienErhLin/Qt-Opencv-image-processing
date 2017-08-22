@@ -314,10 +314,12 @@ debug\moc_mainwindow.cpp: C:\Qt\5.9\msvc2015_64\include\QtWidgets\QMainWindow \
 		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qmessagebox.h \
 		C:\Qt\5.9\msvc2015_64\include\QtCore\QDebug \
 		C:\Qt\5.9\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\QVector \
+		C:\opencv\build\include\opencv2\imgproc\imgproc.hpp \
 		mainwindow.h \
 		debug\moc_predefs.h \
 		C:\Qt\5.9\msvc2015_64\bin\moc.exe
-	C:\Qt\5.9\msvc2015_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include debug/moc_predefs.h -IC:/Qt/5.9/msvc2015_64/mkspecs/win32-msvc -IE:/cel/Qt/opencv_image -IC:/opencv/build/include -IC:/opencv/build/include/opencv -IC:/opencv/build/include/opencv2 -IC:/Qt/5.9/msvc2015_64/include -IC:/Qt/5.9/msvc2015_64/include/QtWidgets -IC:/Qt/5.9/msvc2015_64/include/QtGui -IC:/Qt/5.9/msvc2015_64/include/QtANGLE -IC:/Qt/5.9/msvc2015_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\INCLUDE" -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ATLMFC\INCLUDE" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.10240.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\\shared" -I"C:\Program Files (x86)\Windows Kits\8.1\include\\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\\winrt" mainwindow.h -o debug\moc_mainwindow.cpp
+	C:\Qt\5.9\msvc2015_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include debug/moc_predefs.h -IC:/Qt/5.9/msvc2015_64/mkspecs/win32-msvc -IE:/cel/Qt/Qt-Opencv-image-processing/opencv_image -IC:/opencv/build/include -IC:/opencv/build/include/opencv -IC:/opencv/build/include/opencv2 -IC:/Qt/5.9/msvc2015_64/include -IC:/Qt/5.9/msvc2015_64/include/QtWidgets -IC:/Qt/5.9/msvc2015_64/include/QtGui -IC:/Qt/5.9/msvc2015_64/include/QtANGLE -IC:/Qt/5.9/msvc2015_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\INCLUDE" -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ATLMFC\INCLUDE" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.10240.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\\shared" -I"C:\Program Files (x86)\Windows Kits\8.1\include\\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\\winrt" mainwindow.h -o debug\moc_mainwindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -503,6 +505,8 @@ debug\main.obj: main.cpp mainwindow.h \
 		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qmessagebox.h \
 		C:\Qt\5.9\msvc2015_64\include\QtCore\QDebug \
 		C:\Qt\5.9\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\QVector \
+		C:\opencv\build\include\opencv2\imgproc\imgproc.hpp \
 		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qapplication.h \
 		C:\Qt\5.9\msvc2015_64\include\QtCore\qcoreapplication.h \
@@ -674,7 +678,53 @@ debug\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qmessagebox.h \
 		C:\Qt\5.9\msvc2015_64\include\QtCore\QDebug \
 		C:\Qt\5.9\msvc2015_64\include\QtGui\QImage \
-		ui_mainwindow.h
+		C:\Qt\5.9\msvc2015_64\include\QtCore\QVector \
+		C:\opencv\build\include\opencv2\imgproc\imgproc.hpp \
+		ui_mainwindow.h \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\QVariant \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QAction \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qaction.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qactiongroup.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QApplication \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qapplication.h \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\5.9\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\5.9\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QButtonGroup \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qbuttongroup.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QHeaderView \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qheaderview.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qabstractitemview.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qframe.h \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\qabstractitemmodel.h \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\qitemselectionmodel.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\5.9\msvc2015_64\include\QtGui\qvalidator.h \
+		C:\Qt\5.9\msvc2015_64\include\QtCore\qregularexpression.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qslider.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qstyle.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qrubberband.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QLabel \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qlabel.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QMenuBar \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qmenubar.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qmenu.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QPushButton \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qpushbutton.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qabstractbutton.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QSlider \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QStatusBar \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qstatusbar.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QToolBar \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\qtoolbar.h \
+		C:\Qt\5.9\msvc2015_64\include\QtWidgets\QWidget
 
 debug\moc_mainwindow.obj: debug\moc_mainwindow.cpp 
 

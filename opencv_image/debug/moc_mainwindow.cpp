@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[21];
-    char stringdata0[446];
+    QByteArrayData data[23];
+    char stringdata0[529];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -51,7 +51,9 @@ QT_MOC_LITERAL(16, 321, 26), // "on_pushButton_Save_clicked"
 QT_MOC_LITERAL(17, 348, 14), // "cal_percentage"
 QT_MOC_LITERAL(18, 363, 29), // "on_pushButton_Grabcut_clicked"
 QT_MOC_LITERAL(19, 393, 29), // "on_pushButton_Cluster_clicked"
-QT_MOC_LITERAL(20, 423, 22) // "on_pushButton__clicked"
+QT_MOC_LITERAL(20, 423, 34), // "on_pushButton_Dithering_BW_cl..."
+QT_MOC_LITERAL(21, 458, 37), // "on_pushButton_Dithering_color..."
+QT_MOC_LITERAL(22, 496, 32) // "on_pushButton_Sharpening_clicked"
 
     },
     "MainWindow\0on_pushButton_open_clicked\0"
@@ -67,7 +69,9 @@ QT_MOC_LITERAL(20, 423, 22) // "on_pushButton__clicked"
     "on_pushButton_Save_clicked\0cal_percentage\0"
     "on_pushButton_Grabcut_clicked\0"
     "on_pushButton_Cluster_clicked\0"
-    "on_pushButton__clicked"
+    "on_pushButton_Dithering_BW_clicked\0"
+    "on_pushButton_Dithering_color_clicked\0"
+    "on_pushButton_Sharpening_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -77,7 +81,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -85,22 +89,24 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   94,    2, 0x08 /* Private */,
-       3,    1,   95,    2, 0x08 /* Private */,
-       6,    1,   98,    2, 0x08 /* Private */,
-       7,    0,  101,    2, 0x08 /* Private */,
-       8,    1,  102,    2, 0x08 /* Private */,
-      10,    0,  105,    2, 0x08 /* Private */,
-      11,    0,  106,    2, 0x08 /* Private */,
-      12,    0,  107,    2, 0x08 /* Private */,
-      13,    0,  108,    2, 0x08 /* Private */,
-      14,    0,  109,    2, 0x08 /* Private */,
-      15,    0,  110,    2, 0x08 /* Private */,
-      16,    0,  111,    2, 0x08 /* Private */,
-      17,    0,  112,    2, 0x08 /* Private */,
-      18,    0,  113,    2, 0x08 /* Private */,
-      19,    0,  114,    2, 0x08 /* Private */,
-      20,    0,  115,    2, 0x08 /* Private */,
+       1,    0,  104,    2, 0x08 /* Private */,
+       3,    1,  105,    2, 0x08 /* Private */,
+       6,    1,  108,    2, 0x08 /* Private */,
+       7,    0,  111,    2, 0x08 /* Private */,
+       8,    1,  112,    2, 0x08 /* Private */,
+      10,    0,  115,    2, 0x08 /* Private */,
+      11,    0,  116,    2, 0x08 /* Private */,
+      12,    0,  117,    2, 0x08 /* Private */,
+      13,    0,  118,    2, 0x08 /* Private */,
+      14,    0,  119,    2, 0x08 /* Private */,
+      15,    0,  120,    2, 0x08 /* Private */,
+      16,    0,  121,    2, 0x08 /* Private */,
+      17,    0,  122,    2, 0x08 /* Private */,
+      18,    0,  123,    2, 0x08 /* Private */,
+      19,    0,  124,    2, 0x08 /* Private */,
+      20,    0,  125,    2, 0x08 /* Private */,
+      21,    0,  126,    2, 0x08 /* Private */,
+      22,    0,  127,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -108,6 +114,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, 0x80000000 | 4,    5,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    9,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -145,7 +153,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 12: _t->cal_percentage(); break;
         case 13: _t->on_pushButton_Grabcut_clicked(); break;
         case 14: _t->on_pushButton_Cluster_clicked(); break;
-        case 15: _t->on_pushButton__clicked(); break;
+        case 15: _t->on_pushButton_Dithering_BW_clicked(); break;
+        case 16: _t->on_pushButton_Dithering_color_clicked(); break;
+        case 17: _t->on_pushButton_Sharpening_clicked(); break;
         default: ;
         }
     }
@@ -176,13 +186,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 18)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 16;
+        _id -= 18;
     }
     return _id;
 }
